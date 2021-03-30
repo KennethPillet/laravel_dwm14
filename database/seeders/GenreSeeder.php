@@ -14,16 +14,8 @@ class GenreSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('genres')->insert([
-            [
-                'name' => 'Fantasy'
-            ],
-            [
-                'name' => 'Thriller'
-            ],
-            [
-                'name' => 'Jeunesse'
-            ]
-        ]);
+        $path= base_path("database/genres.sql");
+        $sql =file_get_contents($path);
+        DB::unprepared($sql);
     }
 }
