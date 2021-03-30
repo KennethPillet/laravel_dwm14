@@ -52,7 +52,7 @@ class AuthorController extends Controller
     {
         $updatedAuthor =  Author::updateAuthor($author, $request->all());
 
-        return response()->json($updatedAuthor, 200);
+        return response()->json($updatedAuthor, 202);
     }
 
     /**

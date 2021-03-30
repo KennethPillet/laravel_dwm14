@@ -18,7 +18,7 @@ class GenreController extends Controller
     {
         $genre = Genre::all(); 
         
-        return response()->json($genre, 201); 
+        return response()->json($genre, 200); 
     }
 
     /**
@@ -57,7 +57,7 @@ class GenreController extends Controller
     {
         $updatedGenre =  Genre::updateGenre($genre, $request->all());
 
-        return response()->json($updatedGenre, 200);
+        return response()->json($updatedGenre, 201);
     }
 
     /**
