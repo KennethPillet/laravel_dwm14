@@ -15,23 +15,33 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-            $books = Book::filter('', 'genres');
-            return new BookCollection($books->paginate(10));
-        /* if(){
-            $books = Book::orderBy('title', 'asc');
-            return new BookCollection($books->paginate(10));
-        }
-        else if(){
-            $books = Book::orderBy('description', 'asc');
-            return new BookCollection($books->paginate(10));
-        } else if(){
-            
+        $query = $request->query();
+
+
+        if(isset($query['sort'])){
+            if($query['sort'] === 'titleAsc'){
+                $books = Book::orderBy('title', 'asc');
+                return new BookCollection($books->paginate(10));
+            }
+            else if($query['sort'] === 'titleDesc'){
+                $books = Book::orderBy('title', 'desc');
+                return new BookCollection($books->paginate(10));
+            }
+            else if($query['sort'] === 'descriptionAsc'){
+                $books = Book::orderBy('description', 'asc');
+                return new BookCollection($books->paginate(10));
+            }
+            else if($query['sort'] === 'descriptionDesc'){
+                $books = Book::orderBy('description', 'desc');
+                return new BookCollection($books->paginate(10));
+            }
+        
         }
         else{
             return new BookCollection(Book::paginate(10));
-        } */
+        }
     }
 
     /**
@@ -54,10 +64,15 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Book $book)
+    public function show($id)
     {
-        return response()->json($book, 200); 
-        return response()->json("Ce livre n'existe pas", 404); 
+        $book =  Book::find($id);
+        if ($book){
+            return new BookResource($book);
+        }
+        else{
+            return response()->json(['message' => 'This book does not exist'], 404);
+        }
     }
 
     /**

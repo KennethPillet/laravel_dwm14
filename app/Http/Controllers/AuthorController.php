@@ -16,22 +16,28 @@ class AuthorController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $authors = Author::orderBy('name', 'asc');
-        return new AuthorCollection($authors->paginate(10));
+        $query = $request->query();
 
-        /* if(){
-            $authors = Author::orderBy('name', 'asc');
-            return new AuthorCollection($authors->paginate(10));
-        }
-        else if(){
-            
-        }
+
+        if(isset($query['sort'])){
+            if($query['sort'] === 'nameAsc'){
+                $authors = Author::orderBy('name', 'asc');
+                return new AuthorCollection($authors->paginate(10));
+            }
+            else if($query['sort'] === 'nameDesc'){
+                $authors = Author::orderBy('name', 'desc');
+                return new AuthorCollection($authors->paginate(10));
+            }
+        
+        } 
         else{
             return new AuthorCollection(Author::paginate(10));
-        } */
-    }
+        }
+        
+    } 
+
 
     public function store(Request $request)
     {
@@ -47,9 +53,15 @@ class AuthorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Author $author)
+    public function show($id)
     {
-        return new AuthorResource($author);
+        $author =  Author::find($id);
+        if ($author){
+            return new AuthorResource($author);
+        }
+        else{
+            return response()->json(['message' => 'This author does not exist'], 404);
+        }
     }
 
 

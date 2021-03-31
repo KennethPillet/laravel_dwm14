@@ -15,16 +15,32 @@ class GenreController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+   /*  public function index()
     {
-        /* //$genre = Genre::all(); 
+        //$genre = Genre::all(); 
         $genre = Genre::paginate(10);
+        return response()->json($genre, 200);
+    } */
+    public function index(Request $request)
+    {
+        $query = $request->query();
 
-        return response()->json($genre, 200); */ 
 
-        return new GenreCollection(Genre::all());
+        if(isset($query['sort'])){
+            if($query['sort'] === 'nameAsc'){
+                $genres = Genre::orderBy('name', 'asc');
+                return new GenreCollection($genres->get());
+            }
+            else if($query['sort'] === 'nameDesc'){
+                $genres = Genre::orderBy('name', 'desc');
+                return new GenreCollection($genres->get());
+            }
+        
+        }
+        else{
+            return new GenreCollection(Genre::all());
+        }
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -45,9 +61,16 @@ class GenreController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Genre $genre)
+    public function show($id)
     {
-        return response()->json($genre, 200); 
+        $genre = Genre::find($id);
+
+        if ($genre){
+            return new GenreResource($genre);
+        }
+        else{
+            return response()->json(['message' => 'This genre does not exist'], 404);
+        }
     }
 
     /**
