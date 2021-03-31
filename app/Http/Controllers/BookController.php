@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BookCollection;
 use App\Http\Resources\BookResource;
 use Illuminate\Http\Request;
 
@@ -16,10 +17,12 @@ class BookController extends Controller
      */
     public function index()
     {
-        //$book = Book::all(); 
+        /* //$book = Book::all(); 
         $book = Book::paginate(10);
-        
-        return response()->json($book, 200); 
+
+        return response()->json($book, 200);  */
+
+        return new BookCollection(Book::paginate(10));
     }
 
     /**

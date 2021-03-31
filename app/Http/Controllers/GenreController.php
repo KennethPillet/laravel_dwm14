@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GenreCollection;
 use App\Http\Resources\GenreResource;
 use Illuminate\Http\Request;
 
@@ -16,10 +17,12 @@ class GenreController extends Controller
      */
     public function index()
     {
-        //$genre = Genre::all(); 
+        /* //$genre = Genre::all(); 
         $genre = Genre::paginate(10);
-        
-        return response()->json($genre, 200); 
+
+        return response()->json($genre, 200); */ 
+
+        return new GenreCollection(Genre::all());
     }
 
     /**
