@@ -18,7 +18,19 @@ class AuthorController extends Controller
      */
     public function index()
     {
-      return new AuthorCollection(Author::paginate(10));
+        $authors = Author::orderBy('name', 'asc');
+        return new AuthorCollection($authors->paginate(10));
+
+        /* if(){
+            $authors = Author::orderBy('name', 'asc');
+            return new AuthorCollection($authors->paginate(10));
+        }
+        else if(){
+            
+        }
+        else{
+            return new AuthorCollection(Author::paginate(10));
+        } */
     }
 
     public function store(Request $request)

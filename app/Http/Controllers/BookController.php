@@ -17,12 +17,21 @@ class BookController extends Controller
      */
     public function index()
     {
-        /* //$book = Book::all(); 
-        $book = Book::paginate(10);
-
-        return response()->json($book, 200);  */
-
-        return new BookCollection(Book::paginate(10));
+            $books = Book::filter('', 'genres');
+            return new BookCollection($books->paginate(10));
+        /* if(){
+            $books = Book::orderBy('title', 'asc');
+            return new BookCollection($books->paginate(10));
+        }
+        else if(){
+            $books = Book::orderBy('description', 'asc');
+            return new BookCollection($books->paginate(10));
+        } else if(){
+            
+        }
+        else{
+            return new BookCollection(Book::paginate(10));
+        } */
     }
 
     /**
@@ -48,6 +57,7 @@ class BookController extends Controller
     public function show(Book $book)
     {
         return response()->json($book, 200); 
+        return response()->json("Ce livre n'existe pas", 404); 
     }
 
     /**
