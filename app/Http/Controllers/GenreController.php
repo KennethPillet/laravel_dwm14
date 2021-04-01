@@ -25,11 +25,10 @@ class GenreController extends Controller
     {
         $query = $request->query();
 
-
         if(isset($query['sort'])){
             if($query['sort'] === 'nameAsc'){
                 $genres = Genre::orderBy('name', 'asc');
-                
+
                 return new GenreCollection($genres->get());
             }
             else if($query['sort'] === 'nameDesc'){
@@ -37,7 +36,6 @@ class GenreController extends Controller
 
                 return new GenreCollection($genres->get());
             }
-        
         }
         else if(isset($query['search'])){
             $search = $query['search'];
