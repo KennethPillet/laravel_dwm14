@@ -19,25 +19,41 @@ class BookController extends Controller
     {
         $query = $request->query();
 
-
         if(isset($query['sort'])){
             if($query['sort'] === 'titleAsc'){
                 $books = Book::orderBy('title', 'asc');
+                
                 return new BookCollection($books->paginate(10));
             }
             else if($query['sort'] === 'titleDesc'){
                 $books = Book::orderBy('title', 'desc');
+
                 return new BookCollection($books->paginate(10));
             }
             else if($query['sort'] === 'descriptionAsc'){
                 $books = Book::orderBy('description', 'asc');
+
                 return new BookCollection($books->paginate(10));
             }
             else if($query['sort'] === 'descriptionDesc'){
                 $books = Book::orderBy('description', 'desc');
+
                 return new BookCollection($books->paginate(10));
             }
-        
+        }
+        else if(isset($query['filter'])){
+            $filter = $query['filter'];
+            $bookGenre = Book::whereHas('genres', function($query) use ($filter){
+                $query->where('genres.name', '=', $filter);
+            });
+            
+            return new BookCollection($bookGenre->get());
+        }
+        else if(isset($query['search'])){
+            $search = $query['search'];
+            $lookingFor = Book::where('title', 'like', '%'.$search.'%');
+
+            return new BookCollection($lookingFor->get());
         }
         else{
             return new BookCollection(Book::paginate(10));

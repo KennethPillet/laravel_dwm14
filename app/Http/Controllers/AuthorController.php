@@ -20,7 +20,6 @@ class AuthorController extends Controller
     {
         $query = $request->query();
 
-
         if(isset($query['sort'])){
             if($query['sort'] === 'nameAsc'){
                 $authors = Author::orderBy('name', 'asc');
@@ -31,7 +30,13 @@ class AuthorController extends Controller
                 return new AuthorCollection($authors->paginate(10));
             }
         
-        } 
+        }
+        else if(isset($query['search'])){
+            $search = $query['search'];
+            $lookingFor = Author::where('name', 'like', '%'.$search.'%');
+
+            return new AuthorCollection($lookingFor->get());
+        }
         else{
             return new AuthorCollection(Author::paginate(10));
         }

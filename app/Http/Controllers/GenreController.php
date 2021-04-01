@@ -37,6 +37,12 @@ class GenreController extends Controller
             }
         
         }
+        else if(isset($query['search'])){
+            $search = $query['search'];
+            $lookingFor = Genre::where('name', 'like', '%'.$search.'%');
+
+            return new GenreCollection($lookingFor->get());
+        }
         else{
             return new GenreCollection(Genre::all());
         }
